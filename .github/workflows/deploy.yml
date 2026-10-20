@@ -1,0 +1,51 @@
+name: Release MiliconfigOS Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Get tag name
+        id: get_tag
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build and Obfuscate
+        run: |
+          npm install --no-save javascript-obfuscator terser acorn
+          npm run build
+          npm test
+
+      - name: Create MiliconfigOS.zip
+        run: |
+          zip -r MiliconfigOS.zip _worker.js schema.sql wrangler.toml dist/ migrations/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_tag.outputs.tag_name }}
+          name: MiliconfigOS ${{ steps.get_tag.outputs.tag_name }}
+          body: |
+            نسخه رسمی و آماده استقرار MiliconfigOS 4.0 (پلتفرم مدیریت هوشمند پروکسی با دیتابیس D1، قفل ۵ کاربر و تم سیستم‌عامل)
+            توسعه‌دهنده: Milad Jahani | برند: miliconfig
+          draft: false
+          prerelease: false
+          files: MiliconfigOS.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,30 @@
+{
+  "name": "miliconfig-os",
+  "version": "4.0.0",
+  "description": "MiliconfigOS v4.0 - Intelligent Full-Featured Proxy Configuration Management Platform with 5-User Hard Limit, D1 Database & Advanced Obfuscation",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "obfuscate": "node scripts/build.js --obfuscate",
+    "test": "node scripts/test-worker.js",
+    "deploy:worker": "wrangler deploy",
+    "deploy:pages": "npm run build && wrangler pages deploy dist"
+  },
+  "keywords": [
+    "miliconfigos",
+    "miliconfig",
+    "proxy-manager",
+    "vless",
+    "shadowsocks",
+    "trojan",
+    "xhttp",
+    "cloudflare-workers",
+    "cloudflare-pages",
+    "cloudflare-d1",
+    "sing-box",
+    "clash-meta"
+  ],
+  "author": "Milad Jahani <@miliconfig>",
+  "license": "MIT"
+}
